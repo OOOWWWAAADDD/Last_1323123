@@ -109,7 +109,7 @@ def render_left_column():
                 st.info(f"診断結果: **{final_season_map[final_season_jp]}**"); st.session_state.user_info['personal_color'] = final_season_map[final_season_jp]
                 if st.button("診断をリセット"): st.session_state.diagnosis_step = 0; st.session_state.answers = []; st.rerun()
             else:
-                 if st.button("診断を開始する", use_container_width=True): st.session_state.diagnosis_step = 1; st.rerun()
+                if st.button("診断を開始する", use_container_width=True): st.session_state.diagnosis_step = 1; st.rerun()
         
         pc_options = ["選択してください", "イエベ春", "イエベ秋", "ブルベ夏", "ブルベ冬"]
         pc_index = pc_options.index(st.session_state.user_info.get('personal_color', '選択してください'))
@@ -186,22 +186,21 @@ def render_right_column():
                     st.info(f"**おすすめ理由:** {selected_product['おすすめ理由']}")
         
         st.session_state.user_selections = current_selections
-        
-        # ★★★ 再診断機能をここから削除 ★★★
-        # st.divider()
-        # st.subheader("💡 提案を再調整する")
-        # ... (以降の再診断に関するコードをすべて削除)
-        # ★★★ ここまで ★★★
 
 # --- メイン処理 ---
 def main():
     st.set_page_config(page_title="パーソナルスタイリングAI", layout="wide", initial_sidebar_state="auto")
     st.title("💄✂️ パーソナルスタイリングAI")
     initialize_session_state()
-    api_key = st.text_input("Gemini APIキーを入力してください:", type="password")
-    if not api_key: st.warning("Gemini APIキーを入力して、全ての機能をお楽しみください。"); st.stop()
-    try: genai.configure(api_key=api_key)
-    except Exception as e: st.error(f"APIキーの設定でエラーが発生しました: {e}"); st.stop()
+    
+    # ★★★ ここにAPIキーを直接埋め込みます ★★★
+    API_KEY = "YOUR_API_KEY" # <-- ここにあなたのAPIキーを貼り付けてください
+    
+    try: 
+        genai.configure(api_key=API_KEY)
+    except Exception as e: 
+        st.error(f"APIキーの設定でエラーが発生しました: {e}")
+        st.stop()
     
     if st.session_state.suggestion_generated:
         set_background_color(st.session_state.user_info.get('personal_color', '選択してください'))
